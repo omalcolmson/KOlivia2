@@ -4,7 +4,7 @@ from spacy.tokens import DocBin
 from spacy.training import Example
 
 '''
-Script for testing the spaCy model (really, to see if I know how to read documentation and can actually train the model correctly before doing it for realz.)
+Script for testing the spaCy model (really, to see if I know how to read documentation and can actually train the model correctly before doing it for real.)
 '''
 
 def main():
