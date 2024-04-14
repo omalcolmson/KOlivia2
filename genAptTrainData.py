@@ -88,75 +88,99 @@ Relative:
 '''
 # ---------- PROPAGATING PROMPTS WITH EXTRACTED DATA ----------------
 def genAptTypeD(reason, startDateStr, endDateStr):
+    ''' 
+    Returns a random prompt for an appointment that includes:
+    - a start date
+    - an end date
+    - (sometimes) a reason for the appointment
+    '''
     typeD = [
-        f"Mark my calendar as out of office starting on {startDateStr} to {endDateStr}",
-        f"Schedule my vacation from {startDateStr} to {endDateStr}",
-        f"From {startDateStr} to {endDateStr}, block off time in my calendar for {reason}",
-        f"Add an event to my calendar from {startDateStr} until {endDateStr}",
-        f"Block off time from {startDateStr} to {endDateStr} to {reason}",
-        f"Put an event on my calendar from {startDateStr} to {endDateStr}",
-        f"Create an event from {startDateStr} to {endDateStr} to {reason}",
-        f"Block off my calendar from {startDateStr} to {endDateStr}",
-        f"Starting on {startDateStr} to {endDateStr}, put an event on my calendar for {reason}",
-        f"I will be out of office from {startDateStr} until {endDateStr}",
-        f"Block off time in my calendar from {startDateStr} to {endDateStr} for {reason}",
-        f"Put my trip from {startDateStr} to {endDateStr} on my calendar",
+        f"Mark my calendar as out of office starting on {startDateStr} to {endDateStr}.",
+        f"Schedule my vacation from {startDateStr} to {endDateStr}.",
+        f"From {startDateStr} to {endDateStr}, block off time in my calendar for {reason}.",
+        f"Add an event to my calendar from {startDateStr} until {endDateStr}.",
+        f"Block off time from {startDateStr} to {endDateStr} to {reason}.",
+        f"Put an event on my calendar from {startDateStr} to {endDateStr}.",
+        f"Create an event from {startDateStr} to {endDateStr} to {reason}.",
+        f"Block off my calendar from {startDateStr} to {endDateStr}.",
+        f"Starting on {startDateStr} to {endDateStr}, put an event on my calendar for {reason}.",
+        f"I will be out of office from {startDateStr} until {endDateStr}.",
+        f"Block off time in my calendar from {startDateStr} to {endDateStr} for {reason}.",
+        f"Put my trip from {startDateStr} to {endDateStr} on my calendar.",
     ]
     return random.choice(typeD)
 
 def genAptTypeC(singleDate, reason, timeStart, timeEnd):
+    '''
+    Returns a random prompt for an appointment that includes:
+    - a single date
+    - a start time
+    - an end time
+    - a reason for the appointment
+    '''
     typeC = [
-        f"Mark my calendar for the {singleDate} from {timeStart} to {timeEnd} for {reason}",
-        f"Schedule a meeting for {reason} on {singleDate} from {timeStart} to {timeEnd}",
-        f"Add an event to my calendar for {reason} on {singleDate} starting at {timeStart} and ending at {timeEnd}",
-        f"Block off time for {reason} on {singleDate} from {timeStart} to {timeEnd}",
-        f"Set up a meeting for {reason} on {singleDate} from {timeStart} to {timeEnd}",
-        f"Put {reason} on my calendar for {singleDate} from {timeStart} to {timeEnd}",
-        f"Remind me on {singleDate} from {timeStart} to {timeEnd} to {reason}",
-        f"Pencil in {reason} on {singleDate} from {timeStart} to {timeEnd}",
-        f"Arrange a meeting to {reason} on {singleDate} from {timeStart} to {timeEnd}",
-        f"Book a meeting for {reason} on {singleDate} from {timeStart} to {timeEnd}",
-        f"Create an event for {reason} on {singleDate} from {timeStart} to {timeEnd}",
-        f"Block off my calendar for {reason} on {singleDate} from {timeStart} to {timeEnd}",
-        f"On {singleDate} from {timeStart} to {timeEnd}, schedule a meeting for {reason}",
+        f"Mark my calendar for the {singleDate} from {timeStart} to {timeEnd} for {reason}.",
+        f"Schedule a meeting for {reason} on {singleDate} from {timeStart} to {timeEnd}.",
+        f"Add an event to my calendar for {reason} on {singleDate} starting at {timeStart} and ending at {timeEnd}.",
+        f"Block off time for {reason} on {singleDate} from {timeStart} to {timeEnd}.",
+        f"Set up a meeting for {reason} on {singleDate} from {timeStart} to {timeEnd},",
+        f"Put {reason} on my calendar for {singleDate} from {timeStart} to {timeEnd},",
+        f"Remind me on {singleDate} from {timeStart} to {timeEnd} to {reason}.",
+        f"Pencil in {reason} on {singleDate} from {timeStart} to {timeEnd},",
+        f"Arrange a meeting to {reason} on {singleDate} from {timeStart} to {timeEnd}.",
+        f"Book a meeting for {reason} on {singleDate} from {timeStart} to {timeEnd}.",
+        f"Create an event for {reason} on {singleDate} from {timeStart} to {timeEnd}.",
+        f"Block off my calendar for {reason} on {singleDate} from {timeStart} to {timeEnd}.",
+        f"On {singleDate} from {timeStart} to {timeEnd}, schedule a meeting for {reason}.",
     ]
     return random.choice(typeC)
 
 def genAptTypeB(singleDate, reason, singleTime):
+    '''
+    Returns a random prompt for an appointment that includes:
+    - a single date
+    - a single time
+    - a reason for the appointment
+    '''
     typeB = [
-        f"Mark my calendar for {singleDate} at {singleTime} for {reason}",
-        f"Schedule a meeting for {reason} on {singleDate} at {singleTime}",
-        f"Add an event to my calendar for {reason} on {singleDate} starting at {singleTime}",
-        f"Block off time to {reason} on {singleDate} at {singleTime}",
-        f"Set up a meeting for {reason} on {singleDate} at {singleTime}",
-        f"Put {reason} on my calendar for {singleDate} at {singleTime}",
-        f"Remind me on {singleDate} at {singleTime} to {reason}",
-        f"Pencil in {reason} on {singleDate} at {singleTime}",
-        f"Arrange a meeting to {reason} on {singleDate} at {singleTime}",
-        f"Book a meeting for {reason} on {singleDate} at {singleTime}",
-        f"Create an event for {reason} on {singleDate} at {singleTime}",
-        f"Block off my calendar for {reason} on {singleDate} at {singleTime}",
-        f"On {singleDate} at {singleTime}, schedule a meeting for {reason}",
+        f"Mark my calendar for {singleDate} at {singleTime} for {reason}.",
+        f"Schedule a meeting for {reason} on {singleDate} at {singleTime}.",
+        f"Add an event to my calendar for {reason} on {singleDate} starting at {singleTime}.",
+        f"Block off time to {reason} on {singleDate} at {singleTime}.",
+        f"Set up a meeting for {reason} on {singleDate} at {singleTime}.",
+        f"Put {reason} on my calendar for {singleDate} at {singleTime}.",
+        f"Remind me on {singleDate} at {singleTime} to {reason}.",
+        f"Pencil in {reason} on {singleDate} at {singleTime}.",
+        f"Arrange a meeting to {reason} on {singleDate} at {singleTime}.",
+        f"Book a meeting for {reason} on {singleDate} at {singleTime}.",
+        f"Create an event for {reason} on {singleDate} at {singleTime}.",
+        f"Block off my calendar for {reason} on {singleDate} at {singleTime}.",
+        f"On {singleDate} at {singleTime}, schedule a meeting for {reason}.",
     ]
     return random.choice(typeB)
 
 def genAptTypeA(singleDate, reason):
+    '''
+    Returns a random prompt for an appointment that includes:
+    - a single date
+    - a reason for the appointment
+    '''
     typeA = [
-        f"Mark my calendar for {singleDate} for {reason}",
-        f"Mark my calendar for {reason} on {singleDate}",
-        f"Schedule an appointment for {reason} on {singleDate}",
-        f"Schedule a meeting for {reason} on {singleDate}",
-        f"Add an event to my calendar for {reason} on {singleDate}",
-        f"Block off time for {reason} on {singleDate}",
-        f"Set up a meeting for {reason} on {singleDate}",
-        f"Put {reason} on my calendar for {singleDate}",
-        f"Remind me on {singleDate} to {reason}",
-        f"Pencil in {reason} on {singleDate}",
-        f"Arrange a meeting to {reason} on {singleDate}",
-        f"Book a meeting with {reason} on {singleDate}",
-        f"Create an event for {reason} on {singleDate}",
-        f"Block off my calendar for {reason} on {singleDate}",
-        f"On {singleDate}, schedule a meeting to {reason}",
+        f"Mark my calendar for {singleDate} for {reason}.",
+        f"Mark my calendar for {reason} on {singleDate}.",
+        f"Schedule an appointment for {reason} on {singleDate}.",
+        f"Schedule a meeting for {reason} on {singleDate}.",
+        f"Add an event to my calendar for {reason} on {singleDate}.",
+        f"Block off time for {reason} on {singleDate}.",
+        f"Set up a meeting for {reason} on {singleDate}.",
+        f"Put {reason} on my calendar for {singleDate}.",
+        f"Remind me on {singleDate} to {reason}.",
+        f"Pencil in {reason} on {singleDate}.",
+        f"Arrange a meeting to {reason} on {singleDate}.",
+        f"Book a meeting with {reason} on {singleDate}.",
+        f"Create an event for {reason} on {singleDate}.",
+        f"Block off my calendar for {reason} on {singleDate}.",
+        f"On {singleDate}, schedule a meeting to {reason}.",
     ]
     return random.choice(typeA)
 
@@ -215,7 +239,7 @@ def genPrompts() -> list:
     # COLS: Start_Time, Start_Label, End_Time, End_Label
     timePeriodsDF = pd.read_csv("RawTrainData/timePeriodsData.csv", index_col=0)
 
-    for i in range(200): 
+    for i in range(1000): 
         singleDateTuple = selectRandomDF(singleDatesDF)
         datePeriodTuple = selectRandomDF(datePeriodsDF)
         singleTimeTuple = selectRandomDF(singleTimesDF)
