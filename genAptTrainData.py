@@ -87,6 +87,10 @@ Relative:
 
 '''
 # ---------- PROPAGATING PROMPTS WITH EXTRACTED DATA ----------------
+
+#TODO: need to consider prompts with relative dates and times
+#TODO: need to consider  prompts with only times and no dates (also a relative prompt)
+#TODO: consider the syntax of some of the prompts and the phrases being inserted into them -- some sound awkard
 def genAptTypeD(reason, startDateStr, endDateStr):
     ''' 
     Returns a random prompt for an appointment that includes:
@@ -97,12 +101,16 @@ def genAptTypeD(reason, startDateStr, endDateStr):
     typeD = [
         f"Mark my calendar as out of office starting on {startDateStr} to {endDateStr}.",
         f"Schedule my vacation from {startDateStr} to {endDateStr}.",
+        f"Schedule my vacation from {startDateStr} - {endDateStr}.", #hypenated date
         f"From {startDateStr} to {endDateStr}, block off time in my calendar for {reason}.",
         f"Add an event to my calendar from {startDateStr} until {endDateStr}.",
+        f"Add an event to my calendar from {startDateStr} - {endDateStr}.", #hyphenated date
         f"Block off time from {startDateStr} to {endDateStr} to {reason}.",
+        f"Block off time on my caendar for {reason} starting from {startDateStr} to {endDateStr}.", #order
+        f"Block off my calendar from {startDateStr} to {endDateStr}.",
         f"Put an event on my calendar from {startDateStr} to {endDateStr}.",
         f"Create an event from {startDateStr} to {endDateStr} to {reason}.",
-        f"Block off my calendar from {startDateStr} to {endDateStr}.",
+        f"Create an event to {reason} from {startDateStr} to {endDateStr}.",
         f"Starting on {startDateStr} to {endDateStr}, put an event on my calendar for {reason}.",
         f"I will be out of office from {startDateStr} until {endDateStr}.",
         f"Block off time in my calendar from {startDateStr} to {endDateStr} for {reason}.",
@@ -120,13 +128,14 @@ def genAptTypeC(singleDate, reason, timeStart, timeEnd):
     '''
     typeC = [
         f"Mark my calendar for the {singleDate} from {timeStart} to {timeEnd} for {reason}.",
-        f"Mark my calendar from {timeStart} to {timeEnd} for {reason} for the {singleDate}.",
+        f"Mark my calendar from {timeStart} - {timeEnd} for {reason} for the {singleDate}.", #hypenated time
         f"Mark my calendar from {timeStart} to {timeEnd} for {reason} on the {singleDate}.",
         f"Schedule a meeting for {reason} on {singleDate} from {timeStart} to {timeEnd}.",
         f"Schedule a meeting from {timeStart} to {timeEnd} for {reason} on {singleDate}.", # order
         f"Schedule a meeting for {reason} from {timeStart} to {timeEnd} on {singleDate}.", # order
         f"Add an event to my calendar for {reason} on {singleDate} starting at {timeStart} and ending at {timeEnd}.",
         f"Block off time for {reason} on {singleDate} from {timeStart} to {timeEnd}.",
+        f"Block off {singleDate} from {timeStart} to {timeEnd} to {reason}.", #order
         f"Set up a meeting for {reason} on {singleDate} from {timeStart} to {timeEnd},",
         f"Put {reason} on my calendar for {singleDate} from {timeStart} to {timeEnd},",
         f"Remind me on {singleDate} from {timeStart} to {timeEnd} to {reason}.",
@@ -138,6 +147,7 @@ def genAptTypeC(singleDate, reason, timeStart, timeEnd):
         f"Create an event for {reason} on {singleDate} from {timeStart} to {timeEnd}.", #order
         f"Block off my calendar for {reason} on {singleDate} from {timeStart} to {timeEnd}.",
         f"On {singleDate} from {timeStart} to {timeEnd}, schedule a meeting for {reason}.",
+        f"Starting from {timeStart} to {timeEnd} on {singleDate}, block out time to {reason}.", #order
     ]
     return random.choice(typeC)
 
@@ -150,8 +160,11 @@ def genAptTypeB(singleDate, reason, singleTime):
     '''
     typeB = [
         f"Mark my calendar for {singleDate} at {singleTime} for {reason}.",
+        f"Mark my calendar for {reason} at {singleTime} on {singleDate}.", #order
         f"Schedule a meeting for {reason} on {singleDate} at {singleTime}.",
+        f"Schedule a meeting {singleDate} at {singleTime} for {reason}.",
         f"Add an event to my calendar for {reason} on {singleDate} starting at {singleTime}.",
+        f"Add an event on my calendar for {singleDate} starting at {singleTime} for {reason}.", #order
         f"Block off time to {reason} on {singleDate} at {singleTime}.",
         f"Set up a meeting for {reason} on {singleDate} at {singleTime}.",
         f"Put {reason} on my calendar for {singleDate} at {singleTime}.",
@@ -162,6 +175,7 @@ def genAptTypeB(singleDate, reason, singleTime):
         f"Create an event for {reason} on {singleDate} at {singleTime}.",
         f"Block off my calendar for {reason} on {singleDate} at {singleTime}.",
         f"On {singleDate} at {singleTime}, schedule a meeting for {reason}.",
+        f"At {singleTime} on {singleDate}, block out time to {reason}.", #order
     ]
     return random.choice(typeB)
 
@@ -174,11 +188,14 @@ def genAptTypeA(singleDate, reason):
     typeA = [
         f"Mark my calendar for {singleDate} for {reason}.",
         f"Mark my calendar for {reason} on {singleDate}.",
+        f"Mark my calendar to {reason} on {singleDate}.",
         f"Schedule an appointment for {reason} on {singleDate}.",
         f"Schedule a meeting for {reason} on {singleDate}.",
+        f"Schedule a meeting on {singleDate} for {reason}.", #order
         f"Add an event to my calendar for {reason} on {singleDate}.",
         f"Block off time for {reason} on {singleDate}.",
-        f"Set up a meeting for {reason} on {singleDate}.",
+        f"Block off {singleDate} to {reason}.", #order
+        f"Set up a time to {reason} on {singleDate}.",
         f"Put {reason} on my calendar for {singleDate}.",
         f"Remind me on {singleDate} to {reason}.",
         f"Pencil in {reason} on {singleDate}.",
