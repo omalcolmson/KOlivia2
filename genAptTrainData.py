@@ -120,7 +120,11 @@ def genAptTypeC(singleDate, reason, timeStart, timeEnd):
     '''
     typeC = [
         f"Mark my calendar for the {singleDate} from {timeStart} to {timeEnd} for {reason}.",
+        f"Mark my calendar from {timeStart} to {timeEnd} for {reason} for the {singleDate}.",
+        f"Mark my calendar from {timeStart} to {timeEnd} for {reason} on the {singleDate}.",
         f"Schedule a meeting for {reason} on {singleDate} from {timeStart} to {timeEnd}.",
+        f"Schedule a meeting from {timeStart} to {timeEnd} for {reason} on {singleDate}.", # order
+        f"Schedule a meeting for {reason} from {timeStart} to {timeEnd} on {singleDate}.", # order
         f"Add an event to my calendar for {reason} on {singleDate} starting at {timeStart} and ending at {timeEnd}.",
         f"Block off time for {reason} on {singleDate} from {timeStart} to {timeEnd}.",
         f"Set up a meeting for {reason} on {singleDate} from {timeStart} to {timeEnd},",
@@ -130,6 +134,8 @@ def genAptTypeC(singleDate, reason, timeStart, timeEnd):
         f"Arrange a meeting to {reason} on {singleDate} from {timeStart} to {timeEnd}.",
         f"Book a meeting for {reason} on {singleDate} from {timeStart} to {timeEnd}.",
         f"Create an event for {reason} on {singleDate} from {timeStart} to {timeEnd}.",
+        f"Create an event on {singleDate} from {timeStart} to {timeEnd} for {reason}.", #order
+        f"Create an event for {reason} on {singleDate} from {timeStart} to {timeEnd}.", #order
         f"Block off my calendar for {reason} on {singleDate} from {timeStart} to {timeEnd}.",
         f"On {singleDate} from {timeStart} to {timeEnd}, schedule a meeting for {reason}.",
     ]

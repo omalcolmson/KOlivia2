@@ -30,6 +30,14 @@ def main():
     5 pm on June PM_TIME_END -> ERROR, should be 5 pm PM_TIME_END, June shouldn't have been split up from 13th
     13th DATE_START
     . PM_TIME_END -> ERROR, not sure why it's labeling the period as the time. Maybe because none of the training data had a period at the end?
+
+    Input: Mark my calendar as out of office from 3 pm to 5 pm on June 13th
+    Output: 
+    3 DATE_START
+    5 pm on June PM_TIME_END
+    13th DATE_START
+
+    Commentary -> I think this is happening because the order of the entities in the examples are always the same. I think I need to go back and vary the order of the entities in the examples. 
     '''
 if __name__ == "__main__":
     main()
