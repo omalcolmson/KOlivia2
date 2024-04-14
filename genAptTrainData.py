@@ -318,7 +318,7 @@ def main():
     small_batch = genPrompts() #small list of prompts
     listofDicts = listToListDicts(small_batch)
 
-    with open("PreparedTrainData/small_train.json", "w") as f:
+    with open("PreparedTrainData/small_eval.json", "w") as f:
         json.dump(listofDicts, f, indent=2)
 
     # saving it with spacy docbin
@@ -339,7 +339,7 @@ def main():
             # print("Error: ", e, text, annotations)
             continue #skip the current iteration and continue with the next one
         # spaCyTrainData/test.txt
-    db.to_disk("./spaCyTrainData/exactApptTrain.spacy") #saves it as a spacy docbin file that can be loaded into a spacy model
+    db.to_disk("./spaCyTrainData/exactApptEval.spacy") #saves it as a spacy docbin file that can be loaded into a spacy model
 
 if __name__ == "__main__":
     main()

@@ -192,6 +192,7 @@ def genDatePeriods() -> list:
     - DOTW, YYYY/MM/DD
     
     '''
+    #TODO: there are some errors in the date generation where the start month is later than the end month or the start day is later than the end day, but this could be validated later as we only need the model to identify in he context of a sentence, what is being specified as a start date and what is being specified as an end date
     datePeriods = []
     for yearInt in range(CURRENT_YEAR, CURRENT_YEAR+3): 
         for startMonthInt in range(1, 13):
@@ -257,19 +258,20 @@ def genDatePeriods() -> list:
                     # else the end month must be greater than the start month and the days can be anything
                     endMonthInt = random.choice(range(1, 13))
                     endDayInt = random.choice(range(1, 32))
+                    # if the months are the same and the days are the same or the end day happens before the start day, randomly select dates again
                     while endMonthInt == startMonthInt and endDayInt <= startDayInt:
+                        endMonthInt = random.choice(range(1, 13))
+                        endDayInt = random.choice(range(1, 32))
+                    while endMonthInt == 2 and endDayInt > 28: #exclude leap years 
+                        endMonthInt = random.choice(range(1, 13))
+                        endDayInt = random.choice(range(1, 32))
+                    while endDayInt > 30 and var.monthsAbbrev[endMonthInt-1].lower() not in var.have31Days: #if the month doesn't have 31 days
                         endMonthInt = random.choice(range(1, 13))
                         endDayInt = random.choice(range(1, 32))
                     # if endMonthInt == 2 and startDayInt > 28:
                     #     endMonthInt += 1
                     #     endDayInt = 1 #move to next month
-                    while endMonthInt == 2 and endDayInt > 28:
-                        endMonthInt = random.choice(range(1, 13))
-                        endDayInt = random.choice(range(1, 32))
-                    monthStr = random.choice(['0'+str(endMonthInt), str(endMonthInt)]) if endMonthInt < 10 else str(endMonthInt) #get str representation of monthInt and sometimes include leading 0
-                    while endDayInt > 30 and var.monthsAbbrev[endMonthInt-1].lower() not in var.have31Days: #if the month doesn't have 31 days
-                        endMonthInt = random.choice(range(1, 13))
-                        endDayInt = random.choice(range(1, 32))
+                    monthStr = random.choice(['0'+str(startMonthInt), str(startMonthInt)]) if startMonthInt < 10 else str(startMonthInt) #get str representation of monthInt and sometimes include leading 0
                     endMonthStr = random.choice(['0'+str(endMonthInt), str(endMonthInt)]) if endMonthInt < 10 else str(endMonthInt)
                     endDayStr = random.choice(['0'+str(endDayInt), str(endDayInt)]) if endDayInt < 10 else str(endDayInt)
                     startYrStr = str(yearInt)
@@ -335,6 +337,7 @@ def randomTimePhrase(am_pm: int, hour: int) -> str:
     [ NUMBER TIME ] + ([ optional = 'o'clock'] + [optional = 'in the morning', 'in the afternoon', 'in the evening', 'at night'] ) || [optional = 'am', 'pm']
 
     '''
+    #TODO: these are repeated variables I made locally when testing in a separate file
     amTimePhrases = ["in the morning", ""]
     pmTimePhrases = ["in the afternoon", "in the evening", "at night", ""]
     oClock = ["o'clock", ""]  

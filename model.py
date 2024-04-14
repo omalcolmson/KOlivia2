@@ -52,38 +52,6 @@ def main():
     doc = nlp(text)
     for ent in doc.ents:
         print(ent.text, ent.label_)
-    # # Add the entity recognizer to the pipeline if it doesn't exist
-    # ner = nlp.create_pipe("ner")
-    # new_labels = ["AM_TIME_START", "AM_TIME_END", "PM_TIME_START", "PM_TIME_END", "MILITARY_TIME_START", "MILITARY_TIME_END", "DATE_START", "DATE_END"]
-    # for label in new_labels:
-    #     ner.add_label(label)
-
-    # # load data from docbin from disk
-    # db = DocBin().from_disk("/Users/olivi/OneDrive/Desktop/410/KOlivia2/spaCyTrainData/exactApptTrain.spacy")
-
-    # # convert the docbin to a liust of Docs
-    # docs = list(db.get_docs(nlp.vocab))
-
-    # # convert docs to examples
-    # examples = []
-    # for doc in docs:
-    #     entities = [(ent.start_char, ent.end_char, ent.label_) for ent in doc.ents]
-    #     examples.append(Example.from_dict(doc, {"entities": entities}))
-
-    # #train ner model using loaded data
-    # nlp.begin_training()
-    # for i in range (10):
-    #     random.shuffle(examples)
-    #     for batch in spacy.util.minibatch(examples, size=8):
-    #         nlp.update(batch)
-
-    # # save the model to disk
-    # nlp.to_disk("./spaCyModels/trained_test_model")
-
-    # text = "I have a doctor's appointment at 3:30 pm on May 15th."
-    # doc = nlp(text)
-    # for ent in doc.ents:
-    #     print(ent.text, ent.label_)
 
 if __name__ == "__main__":
     main()
