@@ -309,6 +309,156 @@ def genDatePeriods() -> list:
 
 # ---------- TIME GENERATION FUNCTIONS ----------------
 
+def selectPMPhrase(hour: int) -> str:
+    '''
+    Randomly selects a time phrase for the PM time period based on the hour
+
+    pmTimePhrases = [" pm", " PM", " p.m.", " P.M.", " in the afternoon", " in the evening", " at night", ""]
+
+    '''
+    pm = [" pm", " PM", " p.m.", " P.M.", ""]
+    choice = ''
+    if hour < 6: #12-6 -> afternoon
+        choice = random.choice(pm+[" in the afternoon"])
+    elif hour >= 6 and hour < 9: #6-9 -> evening
+        choice = random.choice(pm+[" in the evening"])
+    elif hour >= 9 and hour < 12:
+        choice = random.choice(pm+[" at night"])
+    return choice
+
+def randomTimePhrase(am_pm: int, hour: int) -> str:
+    '''
+    Args:
+    - am_pm: 0 for am, 1 for pm
+
+    Rule for selecting time phrases 
+    [ NUMBER TIME ] + ([ optional = 'o'clock'] + [optional = 'in the morning', 'in the afternoon', 'in the evening', 'at night'] ) || [optional = 'am', 'pm']
+
+    '''
+    amTimePhrases = ["in the morning", ""]
+    pmTimePhrases = ["in the afternoon", "in the evening", "at night", ""]
+    oClock = ["o'clock", ""]  
+    amFormats = ["am", "AM", "a.m.", "A.M."]
+    pmFormats = ["pm", "PM", "p.m.", "P.M."]
+    if am_pm == 0: # AM times
+        phrase1 = " ".join([random.choice(oClock), random.choice(amTimePhrases)])
+        phrase2 = random.choice(amFormats)
+    else: # PM times
+        phrase1 = selectPMPhrase(hour)
+        phrase2 = selectPMPhrase(hour)
+    return random.choice([phrase1, phrase2]).strip() #randomly adds space since we still want to identify it as a time phrase
+
+def formatHour(hour: int, milTime: bool) -> str:
+    '''
+    Returns a string of the hour in a random format of string digits
+    Works for both regular and military time
+
+    Args:
+    - hour: int
+
+    Formats:
+    - "HH"
+    - "0H"
+    - "H"
+
+    '''
+    if milTime:
+        return "0" + str(hour) if hour < 10 else str(hour)
+    else:
+        return random.choice(["0" + str(hour), str(hour)]) if hour < 10 else str(hour)
+
+def formatMinute(minute: int) -> str:
+    '''
+    Returns a string of the minute in a random format of string digits
+    Works for both regular and military time
+
+    Args:
+    - minute: int
+
+    Formats:
+    - "MM"
+
+    '''
+    return "0" + str(minute) if minute < 10 else str(minute)
+
+def format24HrHR(hour: int) -> str:
+    '''
+    Returns the 24-hour format of the hour in the time pronunciation
+
+    Args:
+    - hour: int
+
+    '''
+    
+    if hour < 10:
+        return n2w(0) + " " + n2w(hour) # e.g., zero two (hundred hours)
+    else:
+        return n2w(hour)
+
+def format24HrMIN(minute: int) -> str:
+    '''
+    Returns the 24-hour format of the minute in the time pronunciation
+
+    Args:
+    - minute: int
+
+    '''
+    strOptions = []
+    if minute == 0:
+        return '' #just return empty string if minutes are zero
+    elif minute in range(1, 10):
+        strOptions.append(n2w(0) + " " + n2w(minute)) # e.g., zero five
+        strOptions.append("oh " + n2w(minute)) # e.g., oh five
+        strOptions.append("o " + n2w(minute)) # e.g., five
+    else:
+        strOptions.append(n2w(minute)) # e.g., twenty
+        strOptions.append(n2w(minute//10) + " " + n2w(minute%10)) # e.g., two zero
+        strOptions.append(n2w(minute//10) + "-" + n2w(minute%10)) # e.g., two-zero
+    
+    return random.choice(strOptions)
+
+def format24HrTime(time: tuple, hourStr: str, minuteStr: str) -> str:
+    '''
+    Returns the 24-hour format of the time
+
+    Args:
+    - time: tuple with (hourInt, minuteInt)
+    - hourStr: str of the hour reflecting 24-hour time pronunciation 
+    - minuteStr: str of the minute(s) formatted in 24-hour time pronunciation
+    '''
+    militaryTime = ''
+    minute = time[1]
+    if minute == 0:
+        militaryTime = hourStr + " hundred"
+        militaryTime += random.choice([" hours", ""]) #randomly adds hours at the end if the minute is zero (e.g., zero one hundred vs zero one hundred hours)
+    else:
+        militaryTime = hourStr + " " + minuteStr
+    return militaryTime
+
+def timeAsWords(hour: int, minute: int, type: int) -> str:
+    '''
+    Returns the time as words (e.g., two thirty, fourteen hundred hours)
+
+    Args:
+    - hour: int
+    - minute: int
+    - type: 0 for regular time, 1 for military time
+
+    '''
+
+    if type == 0 : #regular time
+        if minute in range (1, 10):
+            timeStr = n2w(hour) + " oh " + n2w(minute)
+        elif minute == 0:
+            timeStr = n2w(hour) + " o'clock"
+        else:
+            timeStr = n2w(hour) + " " + n2w(minute) # e.g., two thirty
+    else: #military time
+        timeStr = format24HrHR(hour) + " " + format24HrMIN(minute)
+            
+    return timeStr
+
+
 def genExactTimes() -> list:
     '''
     Exact Time Formats: 
@@ -409,144 +559,131 @@ def genExactTimes() -> list:
 
 def genExactTimePeriods() -> list:
     '''
-    Generates list of time period phrases with specified start and end times in the following formats:
-    - HH:MM - HH:MM
-    - from HH:MM to HH:MM
-    - from HH:MM until HH:MM
-    - HH:MM to HH:MM
-    - at HH:MM - HH:MM
-    - at HH:MM to HH:MM
-    - at HH:MM until HH:MM
+    time formats:
+    - 12:00 am
+    - 12 am
+    - 2:00 pm
+    - 02:00 pm
+    - 14:00 pm
+    - 14:00
+    - fourteen hundred hours
+    - 2:00 in the morning
 
-    I don't think time periods need to be exhaustive, but they should be able to capture the general format of time periods. 
-
-    This function ONLY handles times expressed using digits, as the process of handling times expressed through words (not digits) was requiring too much time and effort at the moment. Plan on returning to this later. 
-
-    This function also only creates time periods in increments of 1 hour to simplify the process of generating the training data.
-
+    Minutes stay the same for simplicity of generating training data.
+   
+    Returns a list of timeframes which are nested tupe pairs : 
+    [
+        (
+            (startTime, label), (endTime, label)
+        )
+    ]
     '''
- 
-    exactTimePeriods = []
-    startTimes = []
-    endTimes = []
-    for minute in range(0, 60):
-        for hour in range(1, 13): #morning times
-            #get str representation of hour and randomly choose to include leading 0 if hour and minute < 10
-            hourStr = random.choice(["0" + str(hour), str(hour)]) if hour < 10 else str(hour)
-            minuteStr = "0" + str(minute) if minute < 10 else str(minute)
-            amTimePhrase = random.choice(var.amTimePhrases[:3]+[" o'clock", ""])
-            minutesAsWords = n2w(minute) if minute > 9 and minute != 0 else 'o ' + n2w(minute)
-            timeAsWords = f"{n2w(hourStr)}{' ' + minutesAsWords if minute != 0 else ''}"
-            if amTimePhrase == " in the morning":
-                timeStr = f"{hourStr}:{minuteStr}{var.oClock[0] if minute == 0 else ''}{amTimePhrase}" # "at HH:MM o'clock in the morning" or "for HH:MM o'clock in the morning"
-                timeStr2 = f"{timeAsWords}{var.oClock[0] if minute == 0 else ''}{amTimePhrase}" # e.g., "at two thirty am"
-            else:
-                timeStr = f"{hourStr}:{minuteStr}{amTimePhrase}"  # "at HH:MM am" or "for HH:MM am" or "HH:MM am"
-                timeStr2 = f"{timeAsWords}{amTimePhrase}" # e.g., "at two thirty am"
-            startTimes.append((timeStr, AM_START_LABEL))
-            startTimes.append((timeStr2, AM_START_LABEL))
-
-            hour = hour + 1 if hour < 12 else 1 #increment hour by 1
-            hourStr = random.choice(["0" + str(hour), str(hour)]) if hour < 10 else str(hour)
-            amTimePhrase = random.choice(var.amTimePhrases)
-            minutesAsWords = n2w(minute) if minute > 9 and minute != 0 else 'o ' + n2w(minute)
-            timeAsWords = f"{n2w(hourStr)}{' ' + minutesAsWords if minute != 0 else ''}"
-            if amTimePhrase == " in the morning":
-                timeStr = f"{hourStr}:{minuteStr}{var.oClock[0] if minute == 0 else ''}{amTimePhrase if hour <= 11 else random.choice(var.pmTimePhrases)}" # "at HH:MM o'clock in the morning" or "for HH:MM o'clock in the morning"
-                timeStr2 = f"{timeAsWords}{var.oClock[0] if minute == 0 else ''}{amTimePhrase if hour<= 11 else random.choice(var.pmTimePhrases)}" # e.g., "at two thirty am"
-            else:
-                timeStr = f"{hourStr}:{minuteStr}{amTimePhrase if hour <= 11 else random.choice(var.pmTimePhrases)}"  # "at HH:MM am" or "for HH:MM am" or "HH:MM am"
-                timeStr2 = f"{timeAsWords}{amTimePhrase if hour <= 11 else random.choice(var.pmTimePhrases)}" # e.g., "at two thirty am"
-            endTimes.append((timeStr, AM_END_LABEL if hour <= 11 else PM_END_LABEL))
-            endTimes.append((timeStr2, AM_END_LABEL if hour <= 11 else PM_END_LABEL))
-        
-        for hour in range(12, 0, -1): #afternoon times, going backwards 
-            hourStr = random.choice(["0" + str(hour), str(hour)]) if hour < 10 else str(hour)
-            minuteStr = "0" + str(minute) if minute < 10 else str(minute)
-            pmTimePhrase = selectPMPhrase(hour)
-            minutesAsWords = n2w(minute) if minute > 9 and minute != 0 else 'o ' + n2w(minute)
-            timeAsWords = f"{n2w(hourStr)}{' ' + minutesAsWords if minute != 0 else ''}"
-            if pmTimePhrase == " at night":
-                timeStr = f"{hourStr}:{minuteStr}{var.oClock[0] if minute == 0 else ''}{pmTimePhrase}" #can include o'clock
-                timeStr2 = f"{timeAsWords}{var.oClock[0] if minute == 0 else ''}{pmTimePhrase}" # e.g., "at two thirty at night" 
-            else:
-                timeStr = f"{hourStr}:{minuteStr}{pmTimePhrase}"
-                timeStr2 = f"{timeAsWords}{pmTimePhrase}" # e.g., "at two thirty pm"
-            startTimes.append((timeStr, PM_START_LABEL))
-            startTimes.append((timeStr2, PM_START_LABEL))
-
-            hour = hour + 1 if hour < 12 else 1
-            hourStr = random.choice(["0" + str(hour), str(hour)]) if hour < 10 else str(hour)
-            pmTimePhrase = selectPMPhrase(hour)
-            minutesAsWords = n2w(minute) if minute > 9 and minute != 0 else 'o ' + n2w(minute)
-            timeAsWords = f"{n2w(hourStr)}{' ' + minutesAsWords if minute != 0 else ''}"
-            if pmTimePhrase == " at night":
-                timeStr = f"{hourStr}:{minuteStr}{var.oClock[0] if minute == 0 else ''}{pmTimePhrase if hour <= 11 else random.choice(var.amTimePhrases)}" #can include o'clock
-                timeStr2 = f"{timeAsWords}{var.oClock[0] if minute == 0 else ''}{pmTimePhrase if hour <= 11 else random.choice(var.amTimePhrases)}" # e.g., "at two thirty at night" 
-            else:
-                timeStr = f"{hourStr}:{minuteStr}{pmTimePhrase if hour <= 11 else random.choice(var.amTimePhrases)}"
-                timeStr2 = f"{timeAsWords}{pmTimePhrase if hour <= 11 else random.choice(var.amTimePhrases)}" # e.g., "at two thirty pm"
-            endTimes.append((timeStr, PM_END_LABEL if hour <= 11 else AM_END_LABEL))
-            endTimes.append((timeStr2, PM_END_LABEL if hour <= 11 else AM_END_LABEL))
-
-        for hour in range(0, 24): #for 24 hour time
-            # TODO: fix end times for 24 hour time
-            hourStr = ""
-            if hour == 0:
-                hourStr = "00"
-            else:
-                hourStr = "0" + str(hour) if hour < 10 else str(hour)
-            minuteStr = "0" + str(minute) if minute < 10 else str(minute)
-            timeStr = f"{hourStr}:{minuteStr}"
-            startTimes.append((timeStr, MILITARY_TIME_START_LABEL))
-            timeStr = f"{hourStr}:{minuteStr} hours"
-            startTimes.append((timeStr, MILITARY_TIME_START_LABEL))
-            
-            if hour == 0:
-                hourPhrase = random.choice(["zero zero", "zero hundred", "twenty-four hundred"])
-            else:
-                hourPhrase = n2w(hour) + " hundred"
-            if minute > 0 and minute < 10:
-                timeStr = f"{hourPhrase} zero {n2w(minute)}"
-                startTimes.append((timeStr, MILITARY_TIME_START_LABEL))
-            elif minute >= 10:
-                timeStr = f"{hourPhrase} {n2w(minute)}" #e.g., "twenty hundred thirty"
-                startTimes.append((timeStr, MILITARY_TIME_START_LABEL))
-                timeStr = f"{hourPhrase} {n2w(minute//10)} {n2w(minute%10)}" #e.g., "twenty hundred three zero"
-                startTimes.append((timeStr, MILITARY_TIME_START_LABEL))
-            elif minute == 0:
-                timeStr = f"{hourPhrase} hours"
-                startTimes.append((timeStr, MILITARY_TIME_START_LABEL))
-        
-        for hour in range(23, -1, -1): 
-            hourStr = ""
-            if hour == 0:
-                hourStr = "00"
-            else:
-                hourStr = "0" + str(hour) if hour < 10 else str(hour)
-            minuteStr = "0" + str(minute) if minute < 10 else str(minute)
-            timeStr = f"{hourStr}:{minuteStr}"
-            endTimes.append((timeStr, MILITARY_TIME_END_LABEL))
-            timeStr = f"{hourStr}:{minuteStr} hours"
-            endTimes.append((timeStr, MILITARY_TIME_END_LABEL))
-            
-            if hour == 0:
-                hourPhrase = random.choice(["zero zero", "zero hundred", "twenty-four hundred"])
-            else:
-                hourPhrase = n2w(hour) + " hundred"
-            if minute > 0 and minute < 10:
-                timeStr = f"{hourPhrase} zero {n2w(minute)}"
-                endTimes.append((timeStr, MILITARY_TIME_END_LABEL))
-            elif minute >= 10:
-                timeStr = f"{hourPhrase} {n2w(minute)}" #e.g., "twenty hundred thirty"
-                endTimes.append((timeStr, MILITARY_TIME_END_LABEL))
-                timeStr = f"{hourPhrase} {n2w(minute//10)} {n2w(minute%10)}" #e.g., "twenty hundred three zero"
-                endTimes.append((timeStr, MILITARY_TIME_END_LABEL))
-            elif minute == 0:
-                timeStr = f"{hourPhrase} hours"
-                endTimes.append((timeStr, MILITARY_TIME_END_LABEL))
+    timeframes = []
     
-    for idx in range(0, len(startTimes)):
-        exactTimePeriods.append((startTimes[idx], endTimes[idx]))
+    for hour in range(0, 24):
+        for minute in range(0, 60):
+            if hour == 0: #ONLY MILITARY TIMES
+                # 24 HOUR TIME IN WORD FORMATS
+                startHr = format24HrHR(hour)
+                endHr = format24HrHR(hour+1)
+                startMin = format24HrMIN(minute)
+                endMin = format24HrMIN(minute)
+                start24time = format24HrTime((hour, minute), startHr, startMin)
+                end24time = format24HrTime((hour+1, minute), endHr, endMin)
+                timeframes.append(((start24time, MILITARY_TIME_START_LABEL), (end24time, MILITARY_TIME_END_LABEL)))
 
-    return exactTimePeriods
+                # 24 HOUR TIME IN DIGIT FORMAT
+                startHr = formatHour(hour, True)
+                endHr = formatHour(hour+1, True)
+                startMin = formatMinute(minute)
+                endMin = formatMinute(minute)
+                start24time = startHr + ":" + startMin
+                end24time = endHr + ":" + endMin
+                timeframes.append(((start24time, MILITARY_TIME_START_LABEL), (end24time, MILITARY_TIME_END_LABEL)))
+            
+            elif hour < 11: #AM AND PM TIMES -> will run from 1 am to 11 am
+                pass
+                # 12 HOUR AM TIME IN DIGIT FORMATS
+                startHr = formatHour(hour, False)
+                endHr = formatHour(hour+1, False)
+                startMin = formatMinute(minute)
+                endMin = formatMinute(minute)
+                start12Time = startHr + ":" + startMin + randomTimePhrase(0, hour)
+                end12Time = endHr + ":" + endMin + randomTimePhrase(1, hour)
+                timeframes.append(((start12Time, AM_START_LABEL), (end12Time, AM_END_LABEL)))
+
+                # 12 HOUR AM TIME IN WORD FORMATS
+                minutesAsWords = n2w(minute) if minute > 9 and minute != 0 else 'o ' + n2w(minute)
+                timeAsWords1 = f"{n2w(hour)}{' ' + minutesAsWords if minute != 0 else ''}"
+                timeAsWords2 = f"{n2w(hour+1)}{' ' + minutesAsWords if minute != 0 else ''}"
+                timeStr1 = f"{timeAsWords1}{randomTimePhrase(0, hour)}" # e.g., "at two thirty am"
+                timeStr2 = f"{timeAsWords2}{randomTimePhrase(0, hour+1)}" # e.g., "at two thirty am"
+                timeframes.append(((timeStr1, AM_START_LABEL), (timeStr2, AM_END_LABEL)))
+
+            elif hour == 11: #AM AND PM TIMES -> will run from 11 am to 12 pm
+                startHr = formatHour(hour, False)
+                endHr = formatHour(hour+1, False)
+                startMin = formatMinute(minute)
+                endMin = formatMinute(minute)
+                start12Time = startHr + ":" + startMin + randomTimePhrase(0, hour) #11 -> am
+                end12Time = endHr + ":" + endMin + randomTimePhrase(1, hour) #12 -> pm
+                timeframes.append(((start12Time, AM_START_LABEL), (end12Time, PM_END_LABEL)))
+
+            # 11 AM to 1 PM in WORD FORMAT
+                minutesAsWords = n2w(minute) if minute > 9 and minute != 0 else 'o ' + n2w(minute)
+                timeAsWords1 = f"{n2w(hour)}{' ' + minutesAsWords if minute != 0 else ''}"
+                timeAsWords2 = f"{n2w(hour+1)}{' ' + minutesAsWords if minute != 0 else ''}"
+                timeStr1 = f"{timeAsWords1}{randomTimePhrase(0, hour)}" # e.g., "at two thirty am"
+                timeStr2 = f"{timeAsWords2}{randomTimePhrase(1, hour+1)}" # e.g., "at two thirty am"
+                timeframes.append(((timeStr1, AM_START_LABEL), (timeStr2, PM_END_LABEL)))
+            else: 
+                # 12 HOUR PM TIME IN DIGIT FORMATS, 12 pm to 1 am
+                startHr = ''
+                endHr = ''
+                if hour == 12:
+                    startHr = formatHour(hour, False)
+                    endHr = formatHour(1, False)
+                elif hour >= 12: 
+                    startHr = formatHour(hour-12, False)
+                    endHr = formatHour(hour-11, False)
+                startMin = formatMinute(minute)
+                endMin = formatMinute(minute)
+                start12Time = startHr + ":" + startMin + randomTimePhrase(1, int(startHr))
+                end12Time = endHr + ":" + endMin + (randomTimePhrase(1, int(endHr)) if int(startHr) != 11 else randomTimePhrase(0, int(startHr)))
+                timeframes.append(((start12Time, PM_START_LABEL), (end12Time, PM_END_LABEL if int(startHr) != 11 else AM_END_LABEL)))
+
+                # 12 HOUR PM TIME IN WORD FORMATS (12 pm to 1 am)
+                
+                minutesAsWords = n2w(minute) if minute > 9 and minute != 0 else 'o ' + n2w(minute)
+                timeAsWords1 = f"{n2w(hour-12)}{' ' + minutesAsWords if minute != 0 else ''}"
+                timeAsWords2 = f"{n2w(hour-11)}{' ' + minutesAsWords if minute != 0 else ''}"
+                timeStr1 = f"{timeAsWords1}{randomTimePhrase(1, int(hour-12))}" # e.g., "at two thirty am"
+                timeStr2 = f"{timeAsWords2}{randomTimePhrase(0, int(hour-11))}" # e.g., "at two thirty am"
+                timeframes.append(((timeStr1, PM_START_LABEL), (timeStr2, PM_END_LABEL if int(hour-12) != 11 else AM_END_LABEL)))
+
+                # ONLY MILITARY TIMES
+                # 24 HOUR TIME IN WORD FORMATS
+                startHr = format24HrHR(hour)
+                if hour == 23:
+                    endHr = format24HrHR(0)
+                else:
+                    endHr = format24HrHR(hour+1)
+                startMin = format24HrMIN(minute)
+                endMin = format24HrMIN(minute)
+                start24time = format24HrTime((hour, minute), startHr, startMin)
+                end24time = format24HrTime((hour+1, minute), endHr, endMin)
+                timeframes.append(((start24time, MILITARY_TIME_START_LABEL), (end24time, MILITARY_TIME_END_LABEL)))
+
+                # 24 HOUR TIME IN DIGIT FORMAT
+                startHr = formatHour(hour, True)
+                if hour == 23:
+                    endHr = formatHour(0, True)
+                else:
+                    endHr = formatHour(hour+1, True)
+                startMin = formatMinute(minute)
+                endMin = formatMinute(minute)
+                start24time = startHr + ":" + startMin
+                end24time = endHr + ":" + endMin
+                timeframes.append(((start24time, MILITARY_TIME_START_LABEL), (end24time, MILITARY_TIME_END_LABEL)))
+                                  
+    return timeframes
