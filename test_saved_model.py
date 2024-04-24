@@ -8,11 +8,12 @@ Script for testing if the spacy model saved ;-;
 
 def main():
     # load our saved model
-    # nlp = spacy.load("./spaCyModels/trained_test_model")
+    nlp = spacy.load("./spaCyModels/trained_test_model")
 
     # Test the trained model
     # print("Testing model...")
     # text = "Mark my calendar as out of office from 3 pm to 5 pm on June 13th."
+    # text = "Add an event to my calendar for 4 pm on April 25th to redecorate my bulletin board."
     # doc = nlp(text)
     # for ent in doc.ents:
     #     print(ent.text, ent.label_)
@@ -42,25 +43,25 @@ def main():
 
     # Evaluating the saved model
     # loading the model
-    nlp = spacy.load("./spaCyModels/trained_test_model")
+    # nlp = spacy.load("./spaCyModels/trained_test_model")
 
-    db = DocBin().from_disk("./spaCyTrainData/exactApptEval.spacy")
+    # db = DocBin().from_disk("./spaCyTrainData/exactApptEval.spacy")
 
-    # Convert the DocBin to a list of Docs
-    docs = list(db.get_docs(nlp.vocab))
+    # # Convert the DocBin to a list of Docs
+    # docs = list(db.get_docs(nlp.vocab))
 
-    # Convert Docs to Examples
-    examples = []
-    for doc in docs:
-        # Create an Example object
-        example = Example.from_dict(doc, {"entities": doc.ents})
-        examples.append(example)
+    # # Convert Docs to Examples
+    # examples = []
+    # for doc in docs:
+    #     # Create an Example object
+    #     example = Example.from_dict(doc, {"entities": doc.ents})
+    #     examples.append(example)
 
-    # Evaluate the model using the examples
-    scores = nlp.evaluate(examples)
-    print("Precision:", scores["ents_p"])
-    print("Recall:", scores["ents_r"])
-    print("F1-score:", scores["ents_f"])
+    # # Evaluate the model using the examples
+    # scores = nlp.evaluate(examples)
+    # print("Precision:", scores["ents_p"])
+    # print("Recall:", scores["ents_r"])
+    # print("F1-score:", scores["ents_f"])
 
     '''
     Precision: 0.9998706338939198
