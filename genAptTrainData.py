@@ -318,6 +318,7 @@ def genPrompts() -> list:
     '''
     #TODO: need to consider if we should handle relative times and dates and if those should be generated separately
 
+    reasonLabel = "REASON"
     data = []
     # read in the csv file
 
@@ -341,7 +342,10 @@ def genPrompts() -> list:
         singleDateLabel = singleDateTuple[0][1]
         reason = random.choice(pc.actions) #randomly select a reason for the event from actions list
         aptA = genAptTypeA(singleDate, reason)
-        sample = createAnnotation(aptA, [(singleDate, singleDateLabel)])
+        if reason in aptA:
+            sample = createAnnotation(aptA, [(singleDate, singleDateLabel), (reason, reasonLabel)])
+        else:
+            sample = createAnnotation(aptA, [(singleDate, singleDateLabel)])
         # print(sample)
         data.append(sample)
 
@@ -349,7 +353,10 @@ def genPrompts() -> list:
         singleTime = singleTimeTuple[0][0]
         singleTimeLabel = singleTimeTuple[0][1]
         aptB = genAptTypeB(singleDate, reason, singleTime)
-        sample = createAnnotation(aptB, [(singleDate, singleDateLabel), (singleTime, singleTimeLabel)])
+        if reason in aptB:
+            sample = createAnnotation(aptB, [(singleDate, singleDateLabel), (singleTime, singleTimeLabel), (reason, reasonLabel)])
+        else:
+            sample = createAnnotation(aptB, [(singleDate, singleDateLabel), (singleTime, singleTimeLabel)])
         # print(sample)
         data.append(sample)
 
@@ -362,7 +369,10 @@ def genPrompts() -> list:
         timeEnd = timeEndTuple[0]
         timeEndLabel = timeEndTuple[1]
         aptC = genAptTypeC(singleDate, reason, timeStart, timeEnd)
-        sample = createAnnotation(aptC, [(singleDate, singleDateLabel), (timeStart, timeStartLabel), (timeEnd, timeEndLabel)])
+        if reason in aptC:
+            sample = createAnnotation(aptC, [(singleDate, singleDateLabel), (timeStart, timeStartLabel), (timeEnd, timeEndLabel), (reason, reasonLabel)])
+        else:
+            sample = createAnnotation(aptC, [(singleDate, singleDateLabel), (timeStart, timeStartLabel), (timeEnd, timeEndLabel)])
         # print(sample)
         data.append(sample)
 
@@ -374,7 +384,10 @@ def genPrompts() -> list:
         endDateStr = endDate[0]
         endDateLabel = endDate[1]
         aptD = genAptTypeD(reason, startDateStr, endDateStr)
-        sample = createAnnotation(aptD, [(startDateStr, startDateLabel), (endDateStr, endDateLabel)])
+        if reason in aptD:
+            sample = createAnnotation(aptD, [(startDateStr, startDateLabel), (endDateStr, endDateLabel), (reason, reasonLabel)])
+        else:
+            sample = createAnnotation(aptD, [(startDateStr, startDateLabel), (endDateStr, endDateLabel)])
         data.append(sample)
 
     return data
@@ -386,7 +399,7 @@ def main():
     small_batch = genPrompts() #small list of prompts
     listofDicts = listToListDicts(small_batch)
 
-    with open("PreparedTrainData/small_eval.json", "w") as f:
+    with open("PreparedTrainData/train_reason.json", "w") as f:
         json.dump(listofDicts, f, indent=2)
 
     # saving it with spacy docbin
@@ -407,7 +420,7 @@ def main():
             # print("Error: ", e, text, annotations)
             continue #skip the current iteration and continue with the next one
         # spaCyTrainData/test.txt
-    db.to_disk("./spaCyTrainData/exactApptEval.spacy") #saves it as a spacy docbin file that can be loaded into a spacy model
+    db.to_disk("./spaCyTrainData/exactApptReasonTrain.spacy") #saves it as a spacy docbin file that can be loaded into a spacy model
 
 if __name__ == "__main__":
     main()

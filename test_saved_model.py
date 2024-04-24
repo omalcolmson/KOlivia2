@@ -8,15 +8,16 @@ Script for testing if the spacy model saved ;-;
 
 def main():
     # load our saved model
-    nlp = spacy.load("./spaCyModels/trained_test_model")
+    # nlp = spacy.load("./spaCyModels/trained_test_model")
+    nlp = spacy.load("./spaCyModels/trained_event_model")
 
     # Test the trained model
-    # print("Testing model...")
-    # text = "Mark my calendar as out of office from 3 pm to 5 pm on June 13th."
+    print("Testing model...")
+    text = "Mark my calendar as out of office from 3 pm to 5 pm on June 13th."
     # text = "Add an event to my calendar for 4 pm on April 25th to redecorate my bulletin board."
-    # doc = nlp(text)
-    # for ent in doc.ents:
-    #     print(ent.text, ent.label_)
+    doc = nlp(text)
+    for ent in doc.ents:
+        print(ent.text, ent.label_)
 
     '''
     Input: Mark my calendar as OOO from 3 pm to 5 pm on June 13th.
