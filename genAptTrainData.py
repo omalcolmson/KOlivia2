@@ -115,6 +115,37 @@ def genAptTypeD(reason, startDateStr, endDateStr):
         f"I will be out of office from {startDateStr} until {endDateStr}.",
         f"Block off time in my calendar from {startDateStr} to {endDateStr} for {reason}.",
         f"Put my trip from {startDateStr} to {endDateStr} on my calendar.",
+        f"I will be out of office for {reason} from {startDateStr} to {endDateStr}.",
+        f"I will be out of office from {startDateStr} to {endDateStr} for {reason}.",
+        f"I will be out of office from {startDateStr} to {endDateStr}.",
+        f"I will be out of office from {startDateStr} until {endDateStr}.",
+        f"I will be out of office from {startDateStr} to {endDateStr} inclusive.",
+        f"I will be out of office starting on {startDateStr} to {endDateStr}.",
+        f"I will be out of office starting from {startDateStr} until {endDateStr}.",
+        f"Mark my calendar as out of office starting from {startDateStr} to {endDateStr}.",
+        f"Mark my calendar as out of office from {startDateStr} to {endDateStr}.",
+        f"Schedule my vacation for {reason} from {startDateStr} to {endDateStr}.",
+        f"Schedule my vacation from {startDateStr} to {endDateStr} for {reason}.",
+        f"From {startDateStr} to {endDateStr}, block off time for {reason} in my calendar.",
+        f"From {startDateStr} to {endDateStr}, block off time in my calendar for {reason}.",
+        f"From {startDateStr} to {endDateStr}, block off time for {reason} on my calendar.",
+        f"From {startDateStr} to {endDateStr}, block off time on my calendar for {reason}.",
+        f"Add an event to my calendar for {reason} from {startDateStr} to {endDateStr}.",
+        f"Add an event to my calendar from {startDateStr} to {endDateStr} for {reason}.",
+        f"Block off time for {reason} from {startDateStr} to {endDateStr}.",
+        f"Block off time in my calendar for {reason} from {startDateStr} to {endDateStr}.",
+        f"Block off time on my calendar from {startDateStr} to {endDateStr} for {reason}.",
+        f"Put {reason} from {startDateStr} to {endDateStr} on my calendar.",
+        f"Put an event from {startDateStr} to {endDateStr} on my calendar for {reason}.",
+        f"Create an event for {reason} from {startDateStr} to {endDateStr}.",
+        f"Create an event from {startDateStr} to {endDateStr} for {reason}.",
+        f"Starting from {startDateStr}, put an event for {reason} on my calendar until {endDateStr}.",
+        f"I will be out of office for {reason} starting from {startDateStr} to {endDateStr}.",
+        f"I will be out of office from {startDateStr} to {endDateStr} for {reason}.",
+        f"Block off time in my calendar for {reason} starting from {startDateStr} to {endDateStr}.",
+        f"Put my trip on my calendar from {startDateStr} to {endDateStr}.",
+        f"Put my trip from {startDateStr} to {endDateStr} on my calendar.",
+
     ]
     return random.choice(typeD)
 
@@ -148,6 +179,32 @@ def genAptTypeC(singleDate, reason, timeStart, timeEnd):
         f"Block off my calendar for {reason} on {singleDate} from {timeStart} to {timeEnd}.",
         f"On {singleDate} from {timeStart} to {timeEnd}, schedule a meeting for {reason}.",
         f"Starting from {timeStart} to {timeEnd} on {singleDate}, block out time to {reason}.", #order
+        f"On {singleDate}, from {timeStart} to {timeEnd}, schedule a meeting for {reason}.",
+        f"Starting from {singleDate}, from {timeStart} to {timeEnd}, block out time to {reason}.",
+        f"Block out time to {reason} from {timeStart} to {timeEnd} on {singleDate}.",
+        f"Block out time on {singleDate} from {timeStart} to {timeEnd} for {reason}.",
+        f"Block out time on {singleDate} to {reason} from {timeStart} to {timeEnd}.",
+        f"{singleDate}, from {timeStart} to {timeEnd}, reserve time for {reason}.",
+        f"Reserve time for {reason} on {singleDate}, from {timeStart} to {timeEnd}.",
+        f"Reserve time on {singleDate}, from {timeStart} to {timeEnd}, for {reason}.",
+        f"Reserve time on {singleDate} for {reason} from {timeStart} to {timeEnd}.",
+        f"From {singleDate}, block off time from {timeStart} to {timeEnd} for {reason}.",
+        f"From {singleDate}, schedule a meeting from {timeStart} to {timeEnd} for {reason}.",
+        f"From {singleDate} to {reason}, schedule a meeting from {timeStart} to {timeEnd}.",
+        f"{singleDate} is booked from {timeStart} to {timeEnd} for {reason}.",
+        f"{singleDate}, {reason}, from {timeStart} to {timeEnd}, mark my calendar.",
+        f"{singleDate}, {reason}, mark my calendar from {timeStart} to {timeEnd}.",
+        f"Schedule a meeting from {singleDate} to {reason} on {timeStart} to {timeEnd}.",
+        f"Set up a meeting for {reason} from {singleDate} to {timeStart} to {timeEnd}.",
+        f"Create an event for {reason} from {singleDate} to {timeStart} on {timeEnd}.",
+        f"Arrange a meeting for {reason} from {singleDate} to {timeStart} on {timeEnd}.",
+        f"Put {reason} on my calendar from {singleDate} to {timeStart} for {timeEnd}.",
+        f"Remind me from {singleDate} to {timeStart} to {reason} on {timeEnd}.",
+        f"Pencil in from {singleDate} to {timeStart} to {reason} on {timeEnd}.",
+        f"Block off from {singleDate} to {timeStart} for {timeEnd} to {reason}.",
+        f"Add an event for {reason} on {singleDate} starting from {timeStart} until {timeEnd}.",
+        f"Create an event on {singleDate} from {timeStart} to {timeEnd} for {reason}.",
+
     ]
     return random.choice(typeC)
 
@@ -161,20 +218,37 @@ def genAptTypeB(singleDate, reason, singleTime):
     typeB = [
         f"Mark my calendar for {singleDate} at {singleTime} for {reason}.",
         f"Mark my calendar for {reason} at {singleTime} on {singleDate}.", #order
+        f"Mark my calendar for {singleTime} to {singleDate} at {singleTime}.", #order
         f"Schedule a meeting for {reason} on {singleDate} at {singleTime}.",
         f"Schedule a meeting {singleDate} at {singleTime} for {reason}.",
+        f"Schedule a meeting at {singleTime} on {singleDate} for {reason}.",
+        f"Schedule a meeting at {singleTime} to {reason} on {singleDate}.",
         f"Add an event to my calendar for {reason} on {singleDate} starting at {singleTime}.",
         f"Add an event on my calendar for {singleDate} starting at {singleTime} for {reason}.", #order
+        f"Add an event on my calendar starting at {singleTime} on for {singleDate} for {reason}.", #order
         f"Block off time to {reason} on {singleDate} at {singleTime}.",
+        f"Block off time on {singleDate} at {singleTime} to {reason}.",
+        f"Block off time at {singleTime} on {singleDate} to {reason}.",
+        f"Block off my calendar for {reason} on {singleDate} at {singleTime}.",
+        f"Block off my calendar on {singleDate} at {singleTime} for {reason}.",
+        f"Block off my calendar at {singleTime} on {singleDate} for {reason}.",
         f"Set up a meeting for {reason} on {singleDate} at {singleTime}.",
+        f"Set up a meeting on {singleDate} at {singleTime} to {reason}.",
+        f"Set up a meeting at {singleTime} on {singleDate} to {reason}.",
         f"Put {reason} on my calendar for {singleDate} at {singleTime}.",
+        f"Put {reason} on my calendar at {singleTime} on {singleDate}.",
         f"Remind me on {singleDate} at {singleTime} to {reason}.",
+        f"Remind me at {singleTime} on {singleDate} to {reason}.",
         f"Pencil in {reason} on {singleDate} at {singleTime}.",
         f"Arrange a meeting to {reason} on {singleDate} at {singleTime}.",
+        f"Arrange a meeting on {singleDate} at {singleTime} to {reason}.",
+        f"Arrange a meeting at {singleTime} on {singleDate} to {reason}.",
         f"Book a meeting for {reason} on {singleDate} at {singleTime}.",
+        f"Book a meeting on {singleDate} at {singleTime} to {reason}.",
+        f"Book a meeting at {singleTime} to {reason} on {singleDate}.",
         f"Create an event for {reason} on {singleDate} at {singleTime}.",
-        f"Block off my calendar for {reason} on {singleDate} at {singleTime}.",
-        f"On {singleDate} at {singleTime}, schedule a meeting for {reason}.",
+        f"Create an event on {singleDate} at {singleTime} to {reason}.",
+        f"On {singleDate} at {singleTime}, schedule a meeting to {reason}.",
         f"At {singleTime} on {singleDate}, block out time to {reason}.", #order
     ]
     return random.choice(typeB)
@@ -237,12 +311,6 @@ def createAnnotation(prompt: str, entityList: list) -> tuple:
 def genPrompts() -> list:
     '''
     Generates the prompts for the model to train on
-
-    Prompt type int mapping:
-    0 -> exact single date
-    1 -> exact single time
-    2 -> time period
-    3 -> date period
 
     training_data = [
     ("Tokyo Tower is 333m tall.", [(0, 11, "BUILDING")]),
