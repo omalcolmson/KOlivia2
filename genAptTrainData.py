@@ -88,8 +88,6 @@ Relative:
 '''
 # ---------- PROPAGATING PROMPTS WITH EXTRACTED DATA ----------------
 
-#TODO: need to consider prompts with relative dates and times
-#TODO: need to consider  prompts with only times and no dates (also a relative prompt)
 #TODO: consider the syntax of some of the prompts and the phrases being inserted into them -- some sound awkard
 
 
@@ -424,7 +422,7 @@ def genPrompts() -> list:
     # # COLS: Start_Time, Start_Label, End_Time, End_Label
     # timePeriodsDF = pd.read_csv("RawTrainData/timePeriodsData.csv", index_col=0)
 
-    for i in range(500): #changed to 500 just to test the generation of prompts with relative dates and times
+    for i in range(1000): #changed to 500 just to test the generation of prompts with relative dates and times
         relativeDateTuple = selectRandomDF(relativeDatesDF)
         relativeTimeTuple = selectRandomDF(relativeTimesDF)
         relativeDateTimeTuple = selectRandomDF(relativeDateTimesDF)

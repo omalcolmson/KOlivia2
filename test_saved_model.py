@@ -13,7 +13,7 @@ def main():
 
     # Test the trained model
     print("Testing model...")
-    text = "Mark my calendar as out of office from 3 pm to 5 pm on June 13th."
+    text = "Mark my calendar to go to work dinner from 3 pm to 5 pm on June 13th."
     # text = "Add an event to my calendar for 4 pm on April 25th to redecorate my bulletin board."
     doc = nlp(text)
     for ent in doc.ents:
