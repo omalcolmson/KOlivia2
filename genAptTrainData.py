@@ -91,6 +91,96 @@ Relative:
 #TODO: need to consider prompts with relative dates and times
 #TODO: need to consider  prompts with only times and no dates (also a relative prompt)
 #TODO: consider the syntax of some of the prompts and the phrases being inserted into them -- some sound awkard
+
+
+def genAptTypeG(relativeDateTime, reason):
+    '''
+    Returns a random prompt for an appointment that includes:
+    - a relative date
+    - a relative time
+    - a reason for the appointment
+    '''
+
+    typeG = [
+        f"Remind me to {reason} {relativeDateTime}.",
+        f"Remind me {relativeDateTime} to {reason}.",
+        f"Add an event to my calendar for time to {reason} {relativeDateTime}.",
+        f"Add an event to my calendar to {reason} {relativeDateTime}.",
+        f"Block off time for {reason} {relativeDateTime}.",
+        f"Block off time to {reason} {relativeDateTime}.",
+        f"Block off {relativeDateTime} to {reason}.",
+        f"Create a calendar event to {reason} {relativeDateTime}.",
+        f"Create an event to {reason} {relativeDateTime}.",
+        f"Create a calendar event {relativeDateTime} to {reason}.",
+        f"Mark my calendar to {reason} {relativeDateTime}.",
+        f"Mark my calendar {relativeDateTime} to {reason}.",
+        f"Schedule a meeting to {reason} {relativeDateTime}.",
+        f"Schedule a meeting {relativeDateTime} to {reason}.",
+        f"Schedule a meeting to {reason} {relativeDateTime}.",
+        f"Set up a meeting to {reason} {relativeDateTime}.",
+        f"Set up a meeting {relativeDateTime} to {reason}.",
+    ]
+
+    return random.choice(typeG)
+
+def genAptTypeF(relativeTime, reason):
+    '''
+    Returns a random prompt for an appointment that includes:
+    - a relative time
+    - a reason for the appointment
+    '''
+    typeF = [ 
+        f"Remind me to {reason} in {relativeTime}.",
+        f"Mark my calendar to {reason} in {relativeTime}.",
+        f"Mark my calendar {relativeTime} to {reason}.",
+        f"Schedule a meeting to {reason} in {relativeTime}.",
+        f"Schedule a meeting {relativeTime} to {reason}.", 
+        f"Schedule an appointment to {reason} {relativeTime}.",
+        f"Add an event to my calendar to {reason} in {relativeTime}.",
+        f"Add an event to my calendar {relativeTime} to {reason}.",
+        f"Block off time to {reason} {relativeTime}.",
+        f"Block off {relativeTime} to {reason}.",
+        f"Block off {relativeTime} in my calendar.",
+        f"Set up a time to {reason} {relativeTime}.",
+        f"Put an event to {reason} {relativeTime} on my calendar.",
+        f"Create an event to {reason} {relativeTime}.",
+        f"Create an event {relativeTime} to {reason}.",
+        f"{relativeTime.capitalize()}, create an event to {reason}.",
+        f"{relativeTime.capitalize()}, mark my calendar to {reason}.",
+        f"{relativeTime.capitalize()}, schedule a meeting to {reason}.",
+        f"{relativeTime.capitalize()}, block off time to {reason}.",
+    ]
+
+    return random.choice(typeF)
+
+def genAptTypeE(relativeDate, reason):
+    '''
+    Returns a random prompt for an appointment that includes:
+    - a relative date
+    - a reason for the appointment
+    '''
+    typeE = [
+        f"Mark my calendar {relativeDate} to {reason}.",
+        f"Mark my calendar to {reason} {relativeDate}.",
+        f"Mark my calendar to {reason} in {relativeDate}.",
+        f"Schedule an appointment to {reason} {relativeDate}.",
+        f"Schedule a meeting to {reason} {relativeDate}.",
+        f"Schedule a meeting {relativeDate} to {reason}.", #order
+        f"Add an event to my calendar to {reason} {relativeDate}.",
+        f"Block off time for {reason} in {relativeDate}.",
+        f"Block off {relativeDate} to {reason}.", #order
+        f"Set up a time to {reason} {relativeDate}.",
+        f"Put {reason} on my calendar for {relativeDate}.",
+        f"Remind me on {relativeDate} to {reason}.",
+        f"Pencil in {reason} in {relativeDate}.",
+        f"Arrange a meeting to {reason} {relativeDate}.",
+        f"Book a time to {reason} {relativeDate}.",
+        f"Create an event to {reason} {relativeDate}.",
+        f"Block off my calendar to {reason} in {relativeDate}.",
+        f"On {relativeDate}, schedule a meeting to {reason}.",
+    ]
+    return random.choice(typeE)
+
 def genAptTypeD(reason, startDateStr, endDateStr):
     ''' 
     Returns a random prompt for an appointment that includes:
@@ -316,79 +406,110 @@ def genPrompts() -> list:
     ("Tokyo Tower is 333m tall.", [(0, 11, "BUILDING")]),
     ]
     '''
-    #TODO: need to consider if we should handle relative times and dates and if those should be generated separately
+    #TODO: need to generate prompts with relative dates and time data
 
     reasonLabel = "REASON"
     data = []
     # read in the csv file
+    relativeDatesDF = pd.read_csv("RawTrainData/relativeDatePeriodsData.csv", index_col=0)
+    relativeTimesDF = pd.read_csv("RawTrainData/relativeTimePeriodsData.csv", index_col=0)
+    relativeDateTimesDF = pd.read_csv("RawTrainData/relativeDateTimePeriodsData.csv", index_col=0)
 
-    # COLS: Text, Label
-    singleDatesDF = pd.read_csv("RawTrainData/exactDatesData.csv", index_col=0)
-    # COLS: Start_Date, Start_Label, End_Date, End_Label
-    datePeriodsDF = pd.read_csv("RawTrainData/datePeriodsData.csv", index_col=0)
-    # COLS: Text, Label
-    singleTimesDF = pd.read_csv("RawTrainData/exactTimesData.csv", index_col=0)
-    # COLS: Start_Time, Start_Label, End_Time, End_Label
-    timePeriodsDF = pd.read_csv("RawTrainData/timePeriodsData.csv", index_col=0)
+    # # COLS: Text, Label
+    # singleDatesDF = pd.read_csv("RawTrainData/exactDatesData.csv", index_col=0)
+    # # COLS: Start_Date, Start_Label, End_Date, End_Label
+    # datePeriodsDF = pd.read_csv("RawTrainData/datePeriodsData.csv", index_col=0)
+    # # COLS: Text, Label
+    # singleTimesDF = pd.read_csv("RawTrainData/exactTimesData.csv", index_col=0)
+    # # COLS: Start_Time, Start_Label, End_Time, End_Label
+    # timePeriodsDF = pd.read_csv("RawTrainData/timePeriodsData.csv", index_col=0)
 
-    for i in range(1000): 
-        singleDateTuple = selectRandomDF(singleDatesDF)
-        datePeriodTuple = selectRandomDF(datePeriodsDF)
-        singleTimeTuple = selectRandomDF(singleTimesDF)
-        timePeriodTuple = selectRandomDF(timePeriodsDF)
+    for i in range(500): #changed to 500 just to test the generation of prompts with relative dates and times
+        relativeDateTuple = selectRandomDF(relativeDatesDF)
+        relativeTimeTuple = selectRandomDF(relativeTimesDF)
+        relativeDateTimeTuple = selectRandomDF(relativeDateTimesDF)
+    #     singleDateTuple = selectRandomDF(singleDatesDF)
+    #     datePeriodTuple = selectRandomDF(datePeriodsDF)
+    #     singleTimeTuple = selectRandomDF(singleTimesDF)
+    #     timePeriodTuple = selectRandomDF(timePeriodsDF)
+    
+    # events/appts with relative dates
+        relativeDate = relativeDateTuple[0][0]
+        relativeDateLabel = relativeDateTuple[0][1]
+        reason = random.choice(pc.actions)
+        aptE = genAptTypeE(relativeDate, reason)
+        sample = createAnnotation(aptE, [(relativeDate, relativeDateLabel), (reason, reasonLabel)])
+        data.append(sample)
+
+    # events/appts with relative times
+        relativeTime = relativeTimeTuple[0][0]
+        relativeTimeLabel = relativeTimeTuple[0][1]
+        reason = random.choice(pc.actions)
+        aptF = genAptTypeF(relativeTime, reason)
+        sample = createAnnotation(aptF, [(relativeTime, relativeTimeLabel), (reason, reasonLabel)])
+        data.append(sample)
+
+    # events/appts with relative dates and times
+        relativeDateTime = relativeDateTimeTuple[0][0]
+        relativeDateTimeLabel = relativeDateTimeTuple[0][1]
+        reason = random.choice(pc.actions)
+        aptG = genAptTypeG(relativeDateTime, reason)
+        sample = createAnnotation(aptG, [(relativeDateTime, relativeDateTimeLabel), (reason, reasonLabel)])
+        data.append(sample)
         
-    # events/appts with 1 date no times
-        singleDate = singleDateTuple[0][0]
-        singleDateLabel = singleDateTuple[0][1]
-        reason = random.choice(pc.actions) #randomly select a reason for the event from actions list
-        aptA = genAptTypeA(singleDate, reason)
-        if reason in aptA:
-            sample = createAnnotation(aptA, [(singleDate, singleDateLabel), (reason, reasonLabel)])
-        else:
-            sample = createAnnotation(aptA, [(singleDate, singleDateLabel)])
-        # print(sample)
-        data.append(sample)
 
-        # events/appts with 1 date and 1 time
-        singleTime = singleTimeTuple[0][0]
-        singleTimeLabel = singleTimeTuple[0][1]
-        aptB = genAptTypeB(singleDate, reason, singleTime)
-        if reason in aptB:
-            sample = createAnnotation(aptB, [(singleDate, singleDateLabel), (singleTime, singleTimeLabel), (reason, reasonLabel)])
-        else:
-            sample = createAnnotation(aptB, [(singleDate, singleDateLabel), (singleTime, singleTimeLabel)])
-        # print(sample)
-        data.append(sample)
+    # # events/appts with 1 date no times
+    #     singleDate = singleDateTuple[0][0]
+    #     singleDateLabel = singleDateTuple[0][1]
+    #     reason = random.choice(pc.actions) #randomly select a reason for the event from actions list
+    #     aptA = genAptTypeA(singleDate, reason)
+    #     if reason in aptA:
+    #         sample = createAnnotation(aptA, [(singleDate, singleDateLabel), (reason, reasonLabel)])
+    #     else:
+    #         sample = createAnnotation(aptA, [(singleDate, singleDateLabel)])
+    #     # print(sample)
+    #     data.append(sample)
 
-        # # events/appts with 1 date and a start and end time
-        # print(timePeriodTuple)
-        timeStartTuple = timePeriodTuple[0]
-        timeEndTuple = timePeriodTuple[1]
-        timeStart = timeStartTuple[0]
-        timeStartLabel = timeStartTuple[1]
-        timeEnd = timeEndTuple[0]
-        timeEndLabel = timeEndTuple[1]
-        aptC = genAptTypeC(singleDate, reason, timeStart, timeEnd)
-        if reason in aptC:
-            sample = createAnnotation(aptC, [(singleDate, singleDateLabel), (timeStart, timeStartLabel), (timeEnd, timeEndLabel), (reason, reasonLabel)])
-        else:
-            sample = createAnnotation(aptC, [(singleDate, singleDateLabel), (timeStart, timeStartLabel), (timeEnd, timeEndLabel)])
-        # print(sample)
-        data.append(sample)
+    #     # events/appts with 1 date and 1 time
+    #     singleTime = singleTimeTuple[0][0]
+    #     singleTimeLabel = singleTimeTuple[0][1]
+    #     aptB = genAptTypeB(singleDate, reason, singleTime)
+    #     if reason in aptB:
+    #         sample = createAnnotation(aptB, [(singleDate, singleDateLabel), (singleTime, singleTimeLabel), (reason, reasonLabel)])
+    #     else:
+    #         sample = createAnnotation(aptB, [(singleDate, singleDateLabel), (singleTime, singleTimeLabel)])
+    #     # print(sample)
+    #     data.append(sample)
 
-        # events/appts with 2 dates and no times
-        startDate = datePeriodTuple[0]
-        endDate = datePeriodTuple[1]
-        startDateStr = startDate[0]
-        startDateLabel = startDate[1]
-        endDateStr = endDate[0]
-        endDateLabel = endDate[1]
-        aptD = genAptTypeD(reason, startDateStr, endDateStr)
-        if reason in aptD:
-            sample = createAnnotation(aptD, [(startDateStr, startDateLabel), (endDateStr, endDateLabel), (reason, reasonLabel)])
-        else:
-            sample = createAnnotation(aptD, [(startDateStr, startDateLabel), (endDateStr, endDateLabel)])
-        data.append(sample)
+    #     # # events/appts with 1 date and a start and end time
+    #     # print(timePeriodTuple)
+    #     timeStartTuple = timePeriodTuple[0]
+    #     timeEndTuple = timePeriodTuple[1]
+    #     timeStart = timeStartTuple[0]
+    #     timeStartLabel = timeStartTuple[1]
+    #     timeEnd = timeEndTuple[0]
+    #     timeEndLabel = timeEndTuple[1]
+    #     aptC = genAptTypeC(singleDate, reason, timeStart, timeEnd)
+    #     if reason in aptC:
+    #         sample = createAnnotation(aptC, [(singleDate, singleDateLabel), (timeStart, timeStartLabel), (timeEnd, timeEndLabel), (reason, reasonLabel)])
+    #     else:
+    #         sample = createAnnotation(aptC, [(singleDate, singleDateLabel), (timeStart, timeStartLabel), (timeEnd, timeEndLabel)])
+    #     # print(sample)
+    #     data.append(sample)
+
+    #     # events/appts with 2 dates and no times
+    #     startDate = datePeriodTuple[0]
+    #     endDate = datePeriodTuple[1]
+    #     startDateStr = startDate[0]
+    #     startDateLabel = startDate[1]
+    #     endDateStr = endDate[0]
+    #     endDateLabel = endDate[1]
+    #     aptD = genAptTypeD(reason, startDateStr, endDateStr)
+    #     if reason in aptD:
+    #         sample = createAnnotation(aptD, [(startDateStr, startDateLabel), (endDateStr, endDateLabel), (reason, reasonLabel)])
+    #     else:
+    #         sample = createAnnotation(aptD, [(startDateStr, startDateLabel), (endDateStr, endDateLabel)])
+    #     data.append(sample)
 
     return data
 
@@ -399,7 +520,7 @@ def main():
     small_batch = genPrompts() #small list of prompts
     listofDicts = listToListDicts(small_batch)
 
-    with open("PreparedTrainData/train_reason.json", "w") as f:
+    with open("PreparedTrainData/relative_prompts_sample.json", "w") as f:
         json.dump(listofDicts, f, indent=2)
 
     # saving it with spacy docbin
@@ -420,7 +541,7 @@ def main():
             # print("Error: ", e, text, annotations)
             continue #skip the current iteration and continue with the next one
         # spaCyTrainData/test.txt
-    db.to_disk("./spaCyTrainData/exactApptReasonTrain.spacy") #saves it as a spacy docbin file that can be loaded into a spacy model
+    db.to_disk("./spaCyTrainData/relativePromptsSampleDoc.spacy") #saves it as a spacy docbin file that can be loaded into a spacy model
 
 if __name__ == "__main__":
     main()

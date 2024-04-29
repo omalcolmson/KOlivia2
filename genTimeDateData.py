@@ -715,19 +715,23 @@ def genRelativeDates() -> list:
     for word in dateFrameWords: 
         for i in range(1, 9): #will aribitrarily choose 1-8 for the number of days, weeks, months, years will be more limited
             if i == 1: #singular, 1 week, 1 month, 1 year
-                pass
                 prefixes = ["in", "in a", ""]
                 for prefix in prefixes:
                     for conjunction in conjunctions:
                         if prefix == "" and conjunction == "":
                             pass #skip this iteration if they are both nothing
                         else:
-                            phrase = prefix + " " + str(i) + " " + word + " " + conjunction
-                            phrase = phrase.strip()
-                            relativeDates.append((phrase, RELATIVE_DATE_LABEL))
-                            phrase = prefix + " " + n2w(i) + " " + word + " " + conjunction
-                            phrase = phrase.strip()
-                            relativeDates.append((phrase, RELATIVE_DATE_LABEL))
+                            if "a" not in prefix: #conjunctions that use 'in'
+                                phrase = prefix + " " + str(i) + " " + word + " " + conjunction
+                                phrase = phrase.strip()
+                                relativeDates.append((phrase, RELATIVE_DATE_LABEL))
+                                phrase = prefix + " " + n2w(i) + " " + word + " " + conjunction
+                                phrase = phrase.strip()
+                                relativeDates.append((phrase, RELATIVE_DATE_LABEL))
+                            else: #conjunctions that use 'in a'
+                                phrase = prefix + " " + word + " " + conjunction
+                                phrase = phrase.strip()
+                                relativeDates.append((phrase, RELATIVE_DATE_LABEL))
             else: #plural
                 prefixes = ["in", ""]
                 for prefix in prefixes:
