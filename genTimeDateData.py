@@ -690,3 +690,66 @@ def genExactTimePeriods() -> list:
                 timeframes.append(((start24time, MILITARY_TIME_START_LABEL), (end24time, MILITARY_TIME_END_LABEL)))
                                   
     return timeframes
+
+def genRelativeDates() -> list:
+    '''
+    Relative date phrases:
+    Phrases that only specify a date relative to the current date
+    - tomorrow
+    - today 
+    - x days from now
+    - next week
+    - in (an, int) week(s) (from now)
+    - next month
+    - in (an, int) month(s) (from now)
+    - next year
+    - in (an, int) year(s) (from now)
+    - this week
+    - this month
+    '''
+    RELATIVE_DATE_LABEL = "RELATIVE_DATE"
+    relativeDates = []
+    dateFrameWords = ["day", "week", "month", "year"]
+    conjunctions = ["from now", "from today", ""]
+
+    for word in dateFrameWords: 
+        for i in range(1, 9): #will aribitrarily choose 1-8 for the number of days, weeks, months, years will be more limited
+            if i == 1: #singular, 1 week, 1 month, 1 year
+                pass
+                prefixes = ["in", "in a", ""]
+                for prefix in prefixes:
+                    for conjunction in conjunctions:
+                        if prefix == "" and conjunction == "":
+                            pass #skip this iteration if they are both nothing
+                        else:
+                            phrase = prefix + " " + str(i) + " " + word + " " + conjunction
+                            phrase = phrase.strip()
+                            relativeDates.append((phrase, RELATIVE_DATE_LABEL))
+                            phrase = prefix + " " + n2w(i) + " " + word + " " + conjunction
+                            phrase = phrase.strip()
+                            relativeDates.append((phrase, RELATIVE_DATE_LABEL))
+            else: #plural
+                prefixes = ["in", ""]
+                for prefix in prefixes:
+                    for conjunction in conjunctions:
+                        if prefix == conjunction:
+                            pass
+                        else:
+                            phrase = prefix + " " + str(i) + " " + word + "s " + conjunction
+                            relativeDates.append((phrase.strip(), RELATIVE_DATE_LABEL))
+                            phrase = prefix + " " + n2w(i) + " " + word + "s " + conjunction
+                            relativeDates.append((phrase.strip(), RELATIVE_DATE_LABEL))
+
+        dateFrames = ["beginning of", "end of", "start of", "end of", "middle of"]
+        prefixes = ["at the", "for the", "around the"]
+        connectors = ["this", "the", "next"]
+        if word == "day":
+            pass
+        else:
+            for prefix in prefixes:
+                for connector in connectors:
+                    for dateFrame in dateFrames:
+                        phrase = f"{prefix} {dateFrame} {connector} {word}"#e.g., "at the beginning of the week"
+                        relativeDates.append((phrase, RELATIVE_DATE_LABEL))
+
+    return relativeDates
