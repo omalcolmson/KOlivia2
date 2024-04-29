@@ -1,0 +1,25 @@
+,Text,Label
+0,tomorrow morning,RELATIVE_DATE_TIME
+1,tomorrow in the morning,RELATIVE_DATE_TIME
+2,tomorrow morning,RELATIVE_DATE_TIME
+3,tomorrow around the morning,RELATIVE_DATE_TIME
+4,tomorrow morning,RELATIVE_DATE_TIME
+5,tomorrow later in the morning,RELATIVE_DATE_TIME
+6,tomorrow afternoon,RELATIVE_DATE_TIME
+7,tomorrow in the afternoon,RELATIVE_DATE_TIME
+8,tomorrow afternoon,RELATIVE_DATE_TIME
+9,tomorrow around the afternoon,RELATIVE_DATE_TIME
+10,tomorrow afternoon,RELATIVE_DATE_TIME
+11,tomorrow later in the afternoon,RELATIVE_DATE_TIME
+12,tomorrow evening,RELATIVE_DATE_TIME
+13,tomorrow in the evening,RELATIVE_DATE_TIME
+14,tomorrow evening,RELATIVE_DATE_TIME
+15,tomorrow around the evening,RELATIVE_DATE_TIME
+16,tomorrow evening,RELATIVE_DATE_TIME
+17,tomorrow later in the evening,RELATIVE_DATE_TIME
+18,tomorrow night,RELATIVE_DATE_TIME
+19,tomorrow in the night,RELATIVE_DATE_TIME
+20,tomorrow night,RELATIVE_DATE_TIME
+21,tomorrow around the night,RELATIVE_DATE_TIME
+22,tomorrow night,RELATIVE_DATE_TIME
+23,tomorrow later in the night,RELATIVE_DATE_TIME

@@ -821,7 +821,20 @@ def genRelativeDateTimes() -> list:
     '''
     Relative time and date phrases:
     Phrases that specify a relative time and date
-    - this morning, afternoon, evening, night (specify today as well as general time of day)
     - tomorrow morning, tomorrow afternoon, tomorrow evening, night
     '''
-    pass
+    relativeDateTimes = []
+    label = "RELATIVE_DATE_TIME"
+    timeFrameWords = ["morning", "afternoon", "evening", "night"]
+    conjunctions = ["in the", "around the", "later in the", "during the"]
+    dateTimeFrames = ["tomorrow"]
+    for dateTime in dateTimeFrames:
+        for time in timeFrameWords:
+            for conjunction in conjunctions:
+                phrase = dateTime + " " + time
+                relativeDateTimes.append((phrase, label))
+                phrase = dateTime + " " + conjunction + " " + time
+                relativeDateTimes.append((phrase, label))
+
+
+    return relativeDateTimes

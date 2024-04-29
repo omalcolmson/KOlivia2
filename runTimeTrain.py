@@ -40,9 +40,14 @@ def main():
     # df.to_csv("RawTrainData/relativeDatePeriodsData.csv", index=True)
 
     # GENERATE RELATIVE TIMES --------------------------
-    relativeTimePeriods = gtt.genRelativeTimes()
-    df = pd.DataFrame(relativeTimePeriods, columns=['Text', 'Label'])
-    df.to_csv("RawTrainData/relativeTimePeriodsData.csv", index=True)
+    # relativeTimePeriods = gtt.genRelativeTimes()
+    # df = pd.DataFrame(relativeTimePeriods, columns=['Text', 'Label'])
+    # df.to_csv("RawTrainData/relativeTimePeriodsData.csv", index=True)
+
+    # GENERATE RELATIVE TIMES AND DATES --------------------------
+    relativeDateTimePeriods = gtt.genRelativeDateTimes()
+    df = pd.DataFrame(relativeDateTimePeriods, columns=['Text', 'Label'])
+    df.to_csv("RawTrainData/relativeDateTimePeriodsData.csv", index=True)
 
 
     # pass
