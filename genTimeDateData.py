@@ -753,3 +753,75 @@ def genRelativeDates() -> list:
                         relativeDates.append((phrase, RELATIVE_DATE_LABEL))
 
     return relativeDates
+
+def genRelativeTimes() -> list:
+    '''
+    Relative time phrases:
+    Phrases that only specify a time relative to the current time
+    - in (an, int) hour(s)
+    - in (an, int) minute(s)
+    '''
+    RELATIVE_TIME_LABEL = "RELATIVE_TIME"
+    relativeTimes = []
+    timeFrameWords = ["morning", "afternoon", "evening", "night"]
+    relativeDateFrames = ["this", "for the", "for this", "in the", "around the", "later in the", "later this", "later today"]
+
+    for word in relativeDateFrames:
+        for time in timeFrameWords:
+            phrase = word + " " + time
+            relativeTimes.append((phrase, RELATIVE_TIME_LABEL))
+
+    for hour in range(1, 24): #upper limit is 24 because 24 hours later is the next day
+        if hour == 1:
+            pass
+            conjunctions = {"in", "about", "for", "around"}
+            for conjunction in conjunctions:
+                if conjunction == "in":
+                    phrase = f"{conjunction} {hour} hour"
+                    relativeTimes.append((phrase.strip(), RELATIVE_TIME_LABEL))
+                    phrase = f"{conjunction} about {hour} hour"
+                    relativeTimes.append((phrase.strip(), RELATIVE_TIME_LABEL))
+                    phrase = f"{conjunction} an hour"
+                    relativeTimes.append((phrase.strip(), RELATIVE_TIME_LABEL))
+                    phrase = f"{conjunction} a hour"
+                    relativeTimes.append((phrase.strip(), RELATIVE_TIME_LABEL))
+                phrase = f"{conjunction} {hour} hour from now"
+                relativeTimes.append((phrase.strip(), RELATIVE_TIME_LABEL))
+                phrase = f"{conjunction} {n2w(hour)} hour from now"
+                relativeTimes.append((phrase.strip(), RELATIVE_TIME_LABEL))
+                phrase = f"{conjunction} an hour from now"
+                relativeTimes.append((phrase.strip(), RELATIVE_TIME_LABEL))
+                phrase = f"{conjunction} a hour from now"
+                relativeTimes.append((phrase.strip(), RELATIVE_TIME_LABEL))
+        else: 
+            conjunctions = {"in", "about", "around", "starting in", "beginning in"}
+            for conjunction in conjunctions:
+                if "in" in conjunction:
+                    phrase = f"{conjunction} {hour} hours"
+                    relativeTimes.append((phrase.strip(), RELATIVE_TIME_LABEL))
+                    phrase = f"{conjunction} about {hour} hours"
+                    relativeTimes.append((phrase.strip(), RELATIVE_TIME_LABEL))
+                    phrase = f"{conjunction} an hour"
+                    relativeTimes.append((phrase.strip(), RELATIVE_TIME_LABEL))
+                    phrase = f"{conjunction} a hour"
+                    relativeTimes.append((phrase.strip(), RELATIVE_TIME_LABEL))
+                phrase = f"{conjunction} {hour} hours from now"
+                relativeTimes.append((phrase.strip(), RELATIVE_TIME_LABEL))
+                phrase = f"{conjunction} {n2w(hour)} hours from now"
+                relativeTimes.append((phrase.strip(), RELATIVE_TIME_LABEL))
+                phrase = f"{conjunction} an hour from now"
+                relativeTimes.append((phrase.strip(), RELATIVE_TIME_LABEL))
+                phrase = f"{conjunction} a hour from now"
+                relativeTimes.append((phrase.strip(), RELATIVE_TIME_LABEL))
+
+    return relativeTimes
+
+
+def genRelativeDateTimes() -> list:
+    '''
+    Relative time and date phrases:
+    Phrases that specify a relative time and date
+    - this morning, afternoon, evening, night (specify today as well as general time of day)
+    - tomorrow morning, tomorrow afternoon, tomorrow evening, night
+    '''
+    pass
